@@ -1,0 +1,31 @@
+{
+  "servers": [
+    {
+      "id": 1,
+      "hostname": "opensusedevtest01.eloryal.fr",
+      "service": "DHCP"
+    },
+    {
+      "id": 2,
+      "hostname": "opensusedevtest02.eloryal.fr",
+      "service": "DNS"
+    },
+    {
+      "id": 3,
+      "hostname": "opensusedevtest03.eloryal.fr",
+      "service": "DHCP"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "root"
+    },
+    {
+      "id": 2,
+      "username": "joe@example.com",
+      "password": "password1"
+    }
+  ]
+}
