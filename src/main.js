@@ -31,7 +31,7 @@ const router = new VueRouter ({
 
   { path: '/network/:id(\\d+)', component: require('./components/Network.vue'), name: 'network', beforeEnter: (to, from, next) => {redirect.checkValidIdUrl(to, next);} }, ///////// REQUIRE AUTH
 
-  { path: '/addserver', component: require('./components/Addserver.vue'), name: 'add server'}, ///////// REQUIRE AUTH
+  { path: '/addserver', component: require('./components/AddServer.vue'), name: 'add server'}, ///////// REQUIRE AUTH
 
   { path: '/settings/:id(\\d+)', component: require('./components/Settings.vue'), name: 'settings', beforeEnter: (to, from, next) => {redirect.checkValidIdUrl(to, next);} }, ///////// REQUIRE AUTH
 

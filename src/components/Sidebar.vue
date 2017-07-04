@@ -89,7 +89,8 @@
 				</div>
 			</draggable>
 		</div>
-	</div>
+		</div>
+		</div>
 </template>
 
 <script>
