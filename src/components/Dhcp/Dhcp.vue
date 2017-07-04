@@ -45,10 +45,34 @@
 			<div class="left aligned two wide column" style="margin-top: 6px">
 				<h3>Baux</h3>
 			</div>
-			<div class="two wide column" style="">
-				<button type="submit" class="ui primary button"><i class="search icon"></i>Visualiser</button>
-			</div>
 		</div>
+
+		<table class="ui sortable celled table" id="tableBauxDns" style="margin-bottom: 50px">
+			<thead>
+				<tr>
+					<th class="sorted descending">IP réseau</th>
+					<th>Hardware Ethernet</th>
+					<th>Hosname</th>
+					<th>UID</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(item, index) in baux">
+					<td>{{ item.ip }}</td>
+					<td>{{ item.hardeth }}</td>
+					<td>{{ item.hostname }}</td>
+					<td>{{ item.uid }}</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
 	</div>
 </template>
 
@@ -62,12 +86,14 @@
 
 		data () {
 			return {
-				requestState: false
+				requestState: false,
+				baux: [],
 			};
 		},
 
 		mounted: function() {
 			this.getSubnets();
+			this.getBaux();
 		},
 
 		methods: {
@@ -87,6 +113,27 @@
 				} else {
 					this.requestState = true;
 				}
+			},
+
+			getBaux() {
+
+				this.$http.post('dhcp/leases', {"ip": this.get_servers[this.$route.params.id].ip} ).then((response) => {
+
+					let _this = this;
+					if (response.body.response.length > 0) {
+						$.each(response.body.response, function(index, value) {
+							_this.baux.push({"ip": value["lease"], "hardeth": value["hardware ethernet"], "hostname": value["client-hostname"], "uid": value["uid"]});
+						});
+					}
+					else
+						console.log("dchp request did not return an array lease - array lease is empty.");
+						this.requestState = true;
+					},
+					(response) => {
+						console.log("error getLeaseDhcp - ", response);
+						this.requestState = true;
+				});
+
 			},
 
 			deleteSubnet(index) {

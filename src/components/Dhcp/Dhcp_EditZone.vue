@@ -105,7 +105,7 @@
 								Client hôte
 							</h4>
 							<div class="column">
-								<span class="ui primary button" @click="">Ajouter</span>
+								<router-link class="item" :to="{name: 'dhcp.addhost', params : {subnet_ip: ipaddress, id: $route.params.id, subnet: this.$route.params.subnet } }"><button class="ui primary button"><i class="add circle icon"></i>Ajouter</button></router-link>
 							</div>
 							<div class="column"></div>
 							<div class="column"></div>
@@ -117,29 +117,19 @@
 								<thead>
 									<tr>
 										<th>Name</th>
-										<th>Registration Date</th>
-										<th>E-mail address</th>
-										<th>Premium Plan</th>
+										<th>Hardware Ethernet</th>
+										<th>Ip Fixe</th>
+										<th>Editer</th>
+										<th>Supprimer</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>John Lilki</td>
-										<td>September 14, 2013</td>
-										<td>jhlilk22@yahoo.com</td>
-										<td>No</td>
-									</tr>
-									<tr>
-										<td>Jamie Harington</td>
-										<td>January 11, 2014</td>
-										<td>jamieharingonton@yahoo.com</td>
-										<td>Yes</td>
-									</tr>
-									<tr>
-										<td>Jill Lewis</td>
-										<td>May 11, 2014</td>
-										<td>jilsewris22@yahoo.com</td>
-										<td>Yes</td>
+									<tr v-for="(client, index) in clientsdhcp">
+										<td> {{ client.name }}</td>
+										<td> {{ client.hardwareethernet }}</td>
+										<td> {{ client.fixedaddress }}</td>
+										<td><router-link class="item" tag="span" :to="{name: 'dhcp.edithost', params : {id: $route.params.id, subnet: $route.params.subnet, host: client, subnet_ip: ipaddress }}"><i class="big link settings icon" style="margin-left: 44%"></i></router-link></td>
+										<td><i class="big link trash outline icon" style="margin-left: 45%" @click="deleteHosts(client)"></i></td>
 									</tr>
 								</tbody>
 							</table>
@@ -203,6 +193,7 @@
 				domainnameserver: "",
 				bonus_domain_name_server: [],
 				domainename: "",
+				clientsdhcp: [],
 			};
 		},
 
@@ -301,8 +292,37 @@
 					console.log("error addZone - ", error);
 					this.loading = false;
 				})
-			}
+			},
 
+			getClientsHote: function() {
+				this.clientsdhcp = [];
+				let _this = this;
+				this.$http.post('dhcp/subnets/hosts', {"ip": this.get_servers[this.$route.params.id].ip, "subnet_ip": this.ipaddress} ).then((response) => {
+
+					if (response.body.response.length > 0) {
+						$.each(response.body.response, function(index, value) {
+
+							_this.clientsdhcp.push({"fixedaddress": value["fixed-address"], "hardwareethernet": value["hardware ethernet"], "name": value.name});
+						});
+					}
+					else
+						console.log("dhcp request did not return an array zone - array zone is empty.");
+						this.requestState = true;
+					},
+					(response) => {
+						console.log("error getHostsDhcp - ", response);
+						this.requestState = true;
+				});
+			},
+
+			deleteHosts(hosts) {
+				this.requestState = false;
+
+				this.$http.post('dhcp/subnets/hc/delete', {"ip": this.get_servers[this.$route.params.id].ip, "subnet_ip": this.ipaddress, "host-client": hosts.name} ).then((response) => {
+					this.requestState = true;
+					this.$router.push({ name: 'dhcp.editzone', params: {"id": this.$route.params.id}});
+				});
+			},
 		},
 
 		computed: {
@@ -328,6 +348,8 @@
 				});
 			}
 			this.domainename = this.get_servers[this.$route.params.id].subnets[this.$route.params.subnet].option['option domain-name'];
+
+			this.getClientsHote();
 
 		}
 	};

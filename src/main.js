@@ -41,8 +41,12 @@ const router = new VueRouter ({
   children: [
   { path: 'addzone', component: require('./components/Dhcp/Dhcp_AddZone.vue'), name: 'dhcp.addzone'},
   { path: 'editzone/:subnet(\\d+)', component: require('./components/Dhcp/Dhcp_EditZone.vue'), name: 'dhcp.editzone' },
-  { path: '', component: require('./components/Dhcp/Dhcp.vue'), name: 'dhcp'}
+  { path: '', component: require('./components/Dhcp/Dhcp.vue'), name: 'dhcp'},
+  { path: 'editzone/:subnet(\\d+)/addhost', component: require('./components/Dhcp/Dhcp_AddHost.vue'), name: 'dhcp.addhost'},
+  { path: 'editzone/:subnet(\\d+)/edithost', component: require('./components/Dhcp/Dhcp_EditHost.vue'), name: 'dhcp.edithost'}
   ]  }, ///////// REQUIRE AUTH
+
+
 
   { path: '/sftp/:id(\\d+)', component: require('./components/SFTP/SFTP_Group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "SFTP")},
   children: [
