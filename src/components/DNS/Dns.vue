@@ -18,8 +18,8 @@
 					<td>{{ zone.name }}</td>
 					<td>{{ zone.type }}</td>
 					<td> {{ zone.file }}</td>
-					<td @click="moreInfoZoneDns(zone.name, index)">click</td>
-					<td @click="checkConfigZone(zone.name, index)">click</td>
+					<td @click="moreInfoZoneDns(zone.name, index)"><button>click</button></td>
+					<td @click="checkConfigZone(zone.name, index)"><button>click</button></td>
 				</tr>
 			</tbody>
 			<tfoot>
@@ -33,6 +33,7 @@
 			</tfoot>
 		</table>
 
+		<router-link class="item" :to="{name: 'dns.addzone' }"><button class="ui primary button"><i class="add circle icon"></i>Ajouter Zone DNS</button></router-link>
 
 		<div class="ui horizontal divider">
 			Or
@@ -76,7 +77,7 @@
 <script>
 
 	import Vuex from 'vuex'
-	import store from '../store'
+//	import store from '../store'
 
 
 	export default {

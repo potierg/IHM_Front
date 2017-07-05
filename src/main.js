@@ -35,7 +35,8 @@ const router = new VueRouter ({
 
   { path: '/settings/:id(\\d+)', component: require('./components/Settings.vue'), name: 'settings', beforeEnter: (to, from, next) => {redirect.checkValidIdUrl(to, next);} }, ///////// REQUIRE AUTH
 
-  { path: '/dns/:id(\\d+)', component: require('./components/Dns.vue'), name: 'dns', beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "DNS")}}, ///////// REQUIRE AUTH
+  { path: '/dns/:id(\\d+)', component: require('./components/DNS/Dns.vue'), name: 'dns', beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "DNS")}}, ///////// REQUIRE AUTH
+  { path: '/dns/addzone', component: require('./components/DNS/Dns_AddZone.vue'), name: 'dns.addzone'},
 
   { path: '/dhcp/:id(\\d+)', component: require('./components/Dhcp/Dhcp_Group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "DHCP")},
   children: [
