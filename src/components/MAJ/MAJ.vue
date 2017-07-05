@@ -88,6 +88,7 @@
 			for (var i = 0; i < this.depot_synchro.length; i++) {
 				this.targeted_synchro.push({"targeted": false});
 			}
+			this.getInfo();
 		},
 
 		methods: {
@@ -112,6 +113,15 @@
 					this.id_target_synchro = index;
 				}
 			},
+
+			getInfo: function() {
+				this.$http.post('update/get_repos', {"ip": this.get_servers[this.$route.params.id].ip} ).then((response) => {
+					console.log(response.body.response);
+				},
+				(response) => {
+					console.log("error addPoolMember - ", response);
+				});
+			}
 		},
 
 		computed: {

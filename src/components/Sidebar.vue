@@ -38,6 +38,22 @@
 						<div class="ui purple empty circular label"></div>
 						MAJ service
 					</div>
+					<div class="item" @click="setFilterService('Web')">
+						<div class="ui brown empty circular label"></div>
+						Web service
+					</div>
+					<div class="item" @click="setFilterService('PROXY')">
+						<div class="ui teal empty circular label"></div>
+						Proxy Web service
+					</div>
+					<div class="item" @click="setFilterService('TICKET')">
+						<div class="ui grey empty circular label"></div>
+						Ticketing service
+					</div>
+					<div class="item" @click="setFilterService('INVENTORY')">
+						<div class="ui pink empty circular label"></div>
+						Inventory service
+					</div>
 				</div>
 			</div>
 		</div>
@@ -54,19 +70,22 @@
 					<div v-for="server in filteredServers" class="item list-group" :key="server.id" style="list-style: none; padding-left: 3px; padding-top: 6px; padding-bottom: 6px">
 						<div class="title">
 							<i class="dropdown icon"></i>
-							<div class="ui horizontal label" v-bind:class="{ 'red': server.service == 'DNS', 'blue' : server.service == 'DHCP', 'orange' : server.service == 'SFTP',  'green' : server.service == 'SUPERVISION', 'purple' : server.service == 'MAJ', 'white' : server.service == 'NONE'}" style="font-size: 0.8em">{{ server.service }}
+							<div class="ui horizontal label" v-bind:class="{ 'red': server.service == 'DNS', 'blue' : server.service == 'DHCP', 'orange' : server.service == 'SFTP',  'green' : server.service == 'SUPERVISION', 'purple' : server.service == 'MAJ', 'brown' : server.service == 'WEB' , 'teal' : server.service == 'PROXY' , 'grey' : server.service == 'TICKET' , 'pink' : server.service == 'INVENTORY' , 'white' : server.service == 'NONE'}" style="font-size: 0.8em">{{ server.service }}
 						</div>
-						<span  v-bind:class="{ 'DNScolor': server.service == 'DNS',  'DHCPcolor': server.service == 'DHCP', 'SFTPcolor' : server.service == 'SFTP', 'SUPERVISONcolor' : server.service == 'SUPERVISION', 'MAJ' : server.service == 'MAJ' }">{{ server.hostname }}</span>
+						<span  v-bind:class="{ 'DNScolor': server.service == 'DNS',  'DHCPcolor': server.service == 'DHCP', 'SFTPcolor' : server.service == 'SFTP', 'SUPERVISONcolor' : server.service == 'SUPERVISION', 'MAJ' : server.service == 'MAJ', 'WEBcolor' : server.service == 'WEB', 'PROXYcolor' : server.service == 'PROXY', 'TICKETcolor' : server.service == 'TICKET', 'INVENTORYcolor' : server.service == 'INVENTORY'}">{{ server.hostname }}</span>
 					</div>
 					<div class="content" style="padding-top: 0px">
-						
+
 						<router-link class="item" :to="{name: 'network', params : {id: getServerIdx(server) }}">Network</router-link>
 						<router-link class="item" v-if="server.service == 'DNS'" :to="{name: 'dns', params : {id: getServerIdx(server) }}">DNS</router-link>
 						<router-link class="item" v-if="server.service == 'DHCP'" :to="{name: 'dhcp', params : {id: getServerIdx(server) }}">DHCP</router-link>
 						<router-link class="item" v-if="server.service == 'SFTP'" :to="{name: 'sftp', params : {id: getServerIdx(server) }}">SFTP</router-link>
 						<router-link class="item" v-if="server.service == 'MAJ'" :to="{name: 'maj', params : {id: getServerIdx(server) }}">Maj</router-link>
 
-
+						<router-link class="item" v-if="server.service == 'WEB'" :to="{name: 'web', params : {id: getServerIdx(server) }}">Web</router-link>
+						<router-link class="item" v-if="server.service == 'TICKET'" :to="{name: 'ticketing', params : {id: getServerIdx(server) }}">Ticket</router-link>
+						<router-link class="item" v-if="server.service == 'INVENTORY'" :to="{name: 'inventory', params : {id: getServerIdx(server) }}">Inventory</router-link>
+						<router-link class="item" v-if="server.service == 'PROXY'" :to="{name: 'proxy', params : {id: getServerIdx(server) }}">Proxy Web</router-link>
 
 						<div class="item list-group" v-if="server.service == 'SUPERVISION' ? true : false" style="padding-left: 3px; padding-top: 6px; padding-bottom: 6px; margin: 0px">
 							<div class="accordion" style="padding-top: 0px; padding-bottom: 2px; margin: 0px">
@@ -78,19 +97,20 @@
 									<p class="transition visible">
 										<router-link class="item":to="{name: 'supervision', params : {id: getServerIdx(server) }}">List machines</router-link>
 										<router-link class="item":to="{name: 'supervision.config', params : {id: getServerIdx(server) }}">Configuration</router-link>
+										<router-link class="item":to="{name: 'supervision.agents', params : {id: getServerIdx(server) }}">Agents</router-link>
 									</p>
 								</div>
 							</div>
 						</div>
 
 						<router-link class="item" :to="{name: 'settings', params : {id: getServerIdx(server) }}">Settings</router-link>
-						
+
 					</div>
 				</div>
 			</draggable>
 		</div>
-		</div>
-		</div>
+	</div>
+	</div>
 </template>
 
 <script>
@@ -180,6 +200,22 @@
 		color: #b870d0;
 	}
 
+	.WEBcolor {
+		color: #A5673F;
+	}
+
+	.PROXYcolor {
+		color: #00b5ad;
+	}
+
+	.INVENTORYcolor {
+		color: #e03997;
+	}
+
+	.TICKETcolor {
+		color: #767676;
+	}
+
 	.navbar {
 		overflow-y: auto;
 		overflow-x: hidden;
@@ -200,7 +236,7 @@
 
 	}
 	.ui.secondary.vertical.pointing.menu {
-		border-bottom-width: 0; 
+		border-bottom-width: 0;
 		border-right-width: 2px;
 		/* border-right-style: solid; */
 		/* border-right-color: rgba(34,36,38,.15); */
@@ -223,7 +259,7 @@
 	.sidebar {
 		background-color: #333;
 		height: 100%;
-		overflow-y: auto; 
+		overflow-y: auto;
 		overflow-x: auto;
 	}
 

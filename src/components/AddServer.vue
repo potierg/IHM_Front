@@ -18,7 +18,12 @@
 							<option value="sftp">SFTP service</option>
 							<option value="supervision">Supervision service</option>
 							<option value="maj">MAJ service</option>
-
+							<!--Barath -start -->
+							<option value="ticket">Ticketing service</option>
+							<option value="proxy">Proxy Web service</option>
+							<option value="inventory">Inventory service</option>
+							<option value="web">Web service</option>
+							<!--Barath -end -->
 						</select>
 					</div>
 					<div class="two fields">
@@ -44,7 +49,7 @@
 
 			</form>
 		</div>
-		
+
 	</div>
 </template>
 

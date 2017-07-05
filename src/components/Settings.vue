@@ -140,7 +140,11 @@
 				{text: 'DNS service', value: 'dns'},
 				{text: 'SFTP service', value: 'sftp'},
 				{text: 'Supervision service', value: 'supervision'},
-				{text: 'MAJ service', value: 'maj'}
+				{text: 'MAJ service', value: 'maj'},
+				{text: 'Web service', value: 'web'},
+				{text: 'Ticketing service', value: 'ticket'},
+				{text: 'Proxy Web service', value: 'proxy'},
+				{text: 'Ticketing service', value: 'ticket'}
 				],
 				requestState: false,
 				serverState: 'unknown',

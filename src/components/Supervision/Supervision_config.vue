@@ -1,6 +1,9 @@
 <template>
 	<div class="ui segment">
 
+		<!--Barath -start -->
+		<a class="ui green button" style="margin-top: 2rem;" :href="zabbixip"><h3 style="margin: 1rem;">Accèder à l'IHM de Supervision</h3></a>
+		<!--Barath -end -->
 		<h4 class="ui horizontal divider header" style="padding-top: 30px; padding-bottom: 50px">
 			<i class="settings icon"></i>
 			Configuration général
@@ -171,6 +174,9 @@
 </template>
 
 <script>
+	//Barath -start
+	import Vuex from 'vuex'
+	//Barath -end
 	export default {
 
 		name: 'Supervision_config',
@@ -180,6 +186,17 @@
 				range_value: 1
 			};
 		},
+
+		//Barath -start
+		computed: {
+			...Vuex.mapGetters(['get_servers']),
+
+			zabbixip: function() {
+				var url = "http://" + this.get_servers[this.$route.params.id].ip +"/zabbix";
+				return(url);
+			}
+		},
+		//Barath -end
 
 		methods: {
 			form_generalconfig() {

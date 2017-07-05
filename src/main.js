@@ -61,6 +61,7 @@ const router = new VueRouter ({
   children: [
   { path: 'addserver', component: require('./components/Supervision/Supervision_addserver.vue'), name: 'supervision.addserver'},
   { path: 'config', component: require('./components/Supervision/Supervision_config.vue'), name: 'supervision.config'},
+  { path: 'agent', component: require('./components/Supervision/Agents.vue'), name: 'supervision.agents'},
   { path: '', component: require('./components/Supervision/Supervision.vue'), name: 'supervision'}
   ]  }, ///////// REQUIRE AUTH
 
@@ -69,7 +70,29 @@ const router = new VueRouter ({
   { path: '', component: require('./components/MAJ/MAJ.vue'), name: 'maj'}
   ]  }, ///////// REQUIRE AUTH
 
+  { path: '/Web/:id(\\d+)', component: require('./components/Web/Web_group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "WEB")},
+    children: [
+      { path: '', component: require('./components/Web/Web.vue'), name: 'web'},
+      { path: 'addvirtualhost', component: require('./components/Web/Web_addvirtualhost.vue'), name: 'web.addvirtualhost'},
+      { path: 'editvirtualhost', component: require('./components/Web/Web_editvirtualhost.vue'), name: 'web.editvirtualhost'}
+    ]
+  }, ///////// REQUIRE AUTH
+
+  { path: '/Proxy/:id(\\d+)', component: require('./components/Proxy\ Web/Proxy_group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "PROXY")},
+    children: [
+      { path: '', component: require('./components/Proxy\ Web/Proxy.vue'), name: 'proxy'},
+      { path: 'addpool', component: require('./components/Proxy\ Web/Proxy_addpool.vue'), name: 'proxy.addpool'},
+      { path: 'editpool', component: require('./components/Proxy\ Web/Proxy_editpool.vue'), name: 'proxy.editpool'},
+      { path: 'addmember', component: require('./components/Proxy\ Web/Proxy_addmember.vue'), name: 'proxy.addmember'},
+      { path: 'editmember', component: require('./components/Proxy\ Web/Proxy_editmember.vue'), name: 'proxy.editmember'}
+    ]
+  }, ///////// REQUIRE AUTH
+
+  { path: '/Inventory/:id(\\d+)', component: require('./components/Inventory/Inventory.vue'), name: 'inventory', beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "INVENTORY")}}, ///////// REQUIRE AUTH
+  { path: '/Ticketing/:id(\\d+)', component: require('./components/Ticketing/Ticketing.vue'), name: 'ticketing', beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "TICKET")}}, ///////// REQUIRE AUTH
+
   { path: '/postman', component: require('./components/postman.vue'), name: 'postman'}, ///////// REQUIRE AUTH
+
   //{ path: '/logout', component: require('./components/Logout.vue'), name: 'log out'},
 
   //{ path: '*', redirect: '/' }

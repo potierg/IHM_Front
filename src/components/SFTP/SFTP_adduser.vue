@@ -42,7 +42,7 @@
 								<i class="circular inverted link icon"
 								v-bind:class=" { 'angle double down': !options, 'angle double up': options, 'grey': !options, 'orange': options } " @click="showOptions()"></i>
 							</div>
-						</div>					
+						</div>
 					</div>
 
 					<transition name="bounce">
