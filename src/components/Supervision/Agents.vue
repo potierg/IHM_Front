@@ -50,7 +50,8 @@
 		data () {
 			return {
 				url: "",
-				ipaddress: ""
+				ipaddress: "",
+				requestState: false
 			};
 		},
 
@@ -80,14 +81,16 @@
 			installingAgent() {
 				if ($('#installAgent').form("is valid")) {
 					$("#confirm_add_agent").toggleClass( "loading" );
-
+					this.requestState = false;
 					this.$http.post('supervision/agent/add', {"ip_server" : this.get_servers[this.$route.params.id].ip, "ip": this.ipaddress} ).then((response) => {
 						$("#confirm_add_agent").toggleClass( "loading" );
+						this.requestState = true;
 					},
 					(response) => {
 						console.log(response);
 						$("#confirm_add_agent").toggleClass( "loading" );
 						console.log("error add server");
+						this.requestState = true;
 					});
 				}
 			},
@@ -95,7 +98,7 @@
 			getUrl() {
 				this.requestState = false;
 				this.url = "";
-				this.$http.post('supervision/get_url', {"ip": this.get_servers[this.$route.params.id].ip } ).then((response) => {
+				this.$http.post('supervision/url', {"ip": this.get_servers[this.$route.params.id].ip } ).then((response) => {
 					this.url = response.body.response.url;
 					this.requestState = true;
 				},

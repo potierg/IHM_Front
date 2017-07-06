@@ -35,7 +35,13 @@ const router = new VueRouter ({
 
   { path: '/settings/:id(\\d+)', component: require('./components/Settings.vue'), name: 'settings', beforeEnter: (to, from, next) => {redirect.checkValidIdUrl(to, next);} }, ///////// REQUIRE AUTH
 
-  { path: '/dns/:id(\\d+)', component: require('./components/Dns.vue'), name: 'dns', beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "DNS")}}, ///////// REQUIRE AUTH
+  { path: '/dns/:id(\\d+)', component: require('./components/DNS/Dns_Group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "DNS")},
+    children: [
+      { path: '', component: require('./components/DNS/Dns.vue'), name: 'dns'},
+      { path: 'addzone', component: require('./components/DNS/Dns_addzone.vue'), name: 'dns.addzone'},
+      { path: 'editzone', component: require('./components/DNS/Dns_editzone.vue'), name: 'dns.editzone'}
+    ]
+  }, ///////// REQUIRE AUTH
 
   { path: '/dhcp/:id(\\d+)', component: require('./components/Dhcp/Dhcp_Group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "DHCP")},
   children: [
@@ -65,10 +71,12 @@ const router = new VueRouter ({
   { path: '', component: require('./components/Supervision/Supervision.vue'), name: 'supervision'}
   ]  }, ///////// REQUIRE AUTH
 
-{ path: '/MAJ/:id(\\d+)', component: require('./components/MAJ/MAJ_Group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "MAJ")},
-  children: [
-  { path: '', component: require('./components/MAJ/MAJ.vue'), name: 'maj'}
-  ]  }, ///////// REQUIRE AUTH
+  { path: '/MAJ/:id(\\d+)', component: require('./components/MAJ/MAJ_Group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "MAJ")},
+    children: [
+      { path: '', component: require('./components/MAJ/MAJ.vue'), name: 'maj'},
+      { path: 'addmirror', component: require('./components/MAJ/MAJ_addmirror.vue'), name: 'maj.addmirror'}
+    ]
+  }, ///////// REQUIRE AUTH
 
   { path: '/Web/:id(\\d+)', component: require('./components/Web/Web_group.vue'), beforeEnter: (to, from, next) => {redirect.checkServiceAndId(to, next, "WEB")},
     children: [

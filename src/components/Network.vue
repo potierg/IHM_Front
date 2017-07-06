@@ -26,10 +26,10 @@
           <td v-bind:class="{ 'warning': interface.name.length == 0, 'positive': interface.name.length > 0}">{{interface.name}}</td>
           <td v-bind:class="{ 'negative': interface.status !== 'UP',  'positive': interface.status === 'UP'}">{{interface.status === 'UNKNOWN' ? 'DOWN' : 'UP' }}</td>
           <td v-bind:class="{ 'warning': interface.ip.length == 0, 'positive': interface.ip.length > 0}">{{interface.ip || 'none'}}</td>
-          <td @click="detailsInterface(index, interface.name)">More info</td>
-          <td @click="rebootInterface(index, interface.name)">Reboot Interface</td>
-          <td @click="bootInterface(index, interface.name)">Boot</td>
-          <td @click="shutdown(index, interface.name)">Shutdown</td>
+          <td><i class="big link info circle icon " style="margin-left: 40%" @click="detailsInterface(index, interface.name)"></i></td>
+          <td><i class="big link refresh outline icon" style="margin-left: 35%" @click="rebootInterface(index, interface.name)"></i></td>
+          <td><i class="big link power outline icon green" style="margin-left: 35%" @click="bootInterface(index, interface.name)"></i></td>
+          <td><i class="big link power outline icon red" style="margin-left: 40%" @click="shutdown(index, interface.name)"></i></td>
         </tr>
       </tbody>
       <tfoot>
@@ -71,6 +71,7 @@
         getInterface() {
           this.requestState = false;
           this.interfaces = [];
+          console.log(this.get_servers[this.$route.params.id].ip);
           this.$http.post('config/interfaces', {"ip": this.get_servers[this.$route.params.id].ip } ).then((response) => {
             this.interfaces = response.body.response;
             this.requestState = true;

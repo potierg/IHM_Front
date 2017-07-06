@@ -2,7 +2,7 @@
 	<div class="ui segment">
 		<div class="ui left aligned grid row">
 
-			<div v-bind:class="{ }" class="ui dimmer">
+			<div v-bind:class="{ 'active': requestState == false }" class="ui dimmer">
 				<div class="ui indeterminate text loader">Fetching data</div>
 			</div>
 
@@ -42,9 +42,11 @@
 					<div class="row">
 						<button class="ui green button large" @click="addSomething()" style="width: 100%; font-size: 0.8em">Ajouter</button>
 					</div>
+					<!--
 					<div class="row">
 						<button class="ui orange button large" @click="editSomething()" style="width: 100%; font-size: 0.8em">Editer</button>
 					</div>
+					-->
 					<div class="row">
 						<button class="ui red button" style="width: 100%; font-size: 0.8em" @click="deleteSomething()">Supprimer</button>
 					</div>
@@ -65,6 +67,7 @@
 
 		data () {
 			return {
+				requestState: false,
 				mirror_local: [{"name": "mirror toto"}, {"name": "mirror tata"}, {"name": "mirror tutu"}],
 				depot_synchro: [{"name": "depot_synchro toto"}, {"name": "depot_synchro tata"}, {"name": "depot_synchro tutu"}],
 				/* 0 = mirroir local / 1 = depot synchronisé */
@@ -114,12 +117,54 @@
 				}
 			},
 
-			getInfo: function() {
-				this.$http.post('update/get_repos', {"ip": this.get_servers[this.$route.params.id].ip} ).then((response) => {
-					console.log(response.body.response);
+			addSomething: function() {
+				if (this.current_tab == 0) {
+					this.$router.push({ name: 'maj.addmirror' });
+				} else if (this.current_tab == 1) {
+					this.$router.push({ name: 'maj' });
+				}
+			},
+
+			deleteSomething: function() {
+				if (this.current_tab == 0 && this.id_target_mirror != -1) {
+					this.delete_mirror();
+				} else if (this.current_tab == 1 && this.id_target_synchro != -1) {
+					this.delete_synchro();
+				}
+			},
+
+			delete_mirror: function() {
+				console.log(this.mirror_local[this.id_target_mirror].name);
+				this.requestState = false;
+				this.$http.post('update/package/delete', {"ip": this.get_servers[this.$route.params.id].ip} ).then((response) => {
+					this.mirror_local = response.body.response;
+					for (var i = 0; i < response.body.response.length; i++) {
+						this.targeted_mirror.push( {"targeted" : false});
+					}
+					this.requestState = true;
 				},
 				(response) => {
-					console.log("error addPoolMember - ", response);
+					console.log("error getInfo - ", response);
+				});
+			},
+
+			delete_synchro: function() {
+				//this.requestState = false;
+				//this.requestState = true;
+			},
+
+			getInfo: function() {
+				this.mirror_local = [];
+				this.requestState = false;
+				this.$http.post('update/package', {"ip": this.get_servers[this.$route.params.id].ip} ).then((response) => {
+					this.mirror_local = response.body.response;
+					for (var i = 0; i < response.body.response.length; i++) {
+						this.targeted_mirror.push( {"targeted" : false});
+					}
+					this.requestState = true;
+				},
+				(response) => {
+					console.log("error getInfo - ", response);
 				});
 			}
 		},
